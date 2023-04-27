@@ -4,13 +4,13 @@ import textwrap
 import io
 from contextlib import redirect_stdout
 
-from redbot.core import checks, commands, Config, utils
+from redbot.core.bot import Red
+from redbot.core import checks, commands, Config
+from redbot.core.utils import chat_formatting as cf
 from redbot.core.dev_commands import Dev
 import discord
 
 log = logging.getLogger('red')
-
-cf = utils.chat_formatting
 
 default_reply = "await ctx.send(f\"`Error in command '{ctx.command.qualified_name}'. Check your console or logs for details.`\")"
 GLOBAL_DEFAULT = {'response': default_reply}
@@ -18,8 +18,8 @@ GLOBAL_DEFAULT = {'response': default_reply}
 
 class ErrorHandler(commands.Cog):
 
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: Red):
+        self.bot: Red = bot
         self.config = Config.get_conf(self, int('sitryk', 36), force_registration=True)
         self.config.register_global(**GLOBAL_DEFAULT)
         self._old_handler = self.bot.on_command_error
